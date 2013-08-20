@@ -18,6 +18,10 @@ if [[ -z "$1" ]]; then
 	echo -e "Error - you must enter a name for the analysis at the end of the command e.g.\"qiime_pipeline stream13\""
 	exit
 fi
+if [[ ${#$1} > 7 ]]; then
+	echo -e "Error - analysis name must be no more than 7 characters\n"
+	exit
+fi
 #Generate qiime parameters file to include name in job
 (cat /share/apps/qiime/qiime_prefs.txt ; echo -e "parallel_pick_otus_trie:job_prefix\t3B_"$1"\nparallel_pick_otus_usearch61_ref:job_prefix\t3C"$1"\nparallel_pick_otus_uclust_ref:job_prefix\t3D_"$1"\nparallel_assign_taxonomy_rdp:job_prefix\t4_"$1"\nparallel_align_seqs_pynast:job_prefix\t5_"$1"") > $HOME/$1/"$1"_qiime_params.txt
 #
