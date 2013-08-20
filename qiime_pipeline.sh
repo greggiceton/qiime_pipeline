@@ -1,5 +1,11 @@
 #!/bin/bash
+#
 #Qiime pipeline by Gregg Iceton
+#
+#Expects a directory to exist whose name is passed at the command line
+#e.g. ./qiime_pipline.sh stream13
+#This directory should contain only stream13.fastq - other files or directories
+#may cause an error
 #
 #Designed to operate as a workflow on the NGS cluster
 #such that serial jobs are submitted to compute nodes
