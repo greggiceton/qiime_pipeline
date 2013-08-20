@@ -3,9 +3,12 @@
 #Qiime pipeline by Gregg Iceton
 #
 #Expects a directory to exist whose name is passed at the command line
-#e.g. ./qiime_pipline.sh stream13
-#This directory should contain only stream13.fastq - other files or directories
-#may cause an error
+#e.g. ./qiime_pipline.sh YOUR_FILE_NAME
+#This directory should contain e.g. YOUR_FILE_NAME.fastq and YOUR_FILE_NAMEmap.txt
+#Note that the mapping file name format!
+#Any pre-existing directories or files other than the above will cause an error
+#For example, if you are running an analysis for the second time you must remove 
+#the directories created by the first analysis, or change the directory name
 #
 #Designed to operate as a workflow on the NGS cluster
 #such that serial jobs are submitted to compute nodes
@@ -34,12 +37,22 @@ echo $SECOND
 THIRD=$(qsub -N "$1"potu -v name=$1 -W depend=afterok:$SECOND pick_otus_open.sh)
 echo $THIRD
 #
-#remove chimeras USE PARALLEL (-a should be -a /share/apps/qiime/core_set_aligned.fasta.imputed
+#remove chimeras
 #
-#FOURTH=$(qsub -N $1 -v name=$1 depend=afterok:$THIRD remove_chimeras.sh)
-#echo $FOURTH
+FOURTH=$(qsub -N "$1"chim -v name=$1 -W depend=afterok:$THIRD remove_chimeras.sh)
+echo $FOURTH
+#
+#filter chimeras from alignment
+#
+#FIFTH=$(qsub -N "$1"chim -v name=$1 -W depend=afterok:$FOURTH filter_chimeras_alignment.sh)
+#echo $FIFTH
+#
+#filter chimeras from otu table
+#
+#SIXTH=$(qsub -N "$1"chim -v name=$1 -W depend=afterok:$FIFTH filter_chimeras_otu_table.sh)
+#echo $SIXTH
 #
 #Summarize taxa and draw plots
 #
-#FIFTH=$(qsub -N $1 -v name=$1 -W depend=afterok:$FOURTH sum_taxa_plots.sh)
-#echo $FIFTH
+#SEVENTH=$(qsub -N "$1"sum_tax -v name=$1 -W depend=afterok:$SIXTH sum_taxa_plots.sh)
+#echo $SEVENTH

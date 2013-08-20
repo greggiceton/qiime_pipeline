@@ -1,6 +1,5 @@
-
 #!/bin/sh
-
+#
 #Gregg Iceton
 #
 #PBS -M gregg@iceton.org
