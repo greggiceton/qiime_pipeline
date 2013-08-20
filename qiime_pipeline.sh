@@ -12,7 +12,7 @@
 #
 #Check that $1 isn't empty
 if [[ -z "$1" ]]; then
-	echo -e "Error - you must enter a name for the analysis at the end of the command e.g.\"./qiime_pipeline stream13\""
+	echo -e "Error - you must enter a name for the analysis at the end of the command e.g.\"qiime_pipeline stream13\""
 	exit
 fi
 #Generate qiime parameters file to include name in job
