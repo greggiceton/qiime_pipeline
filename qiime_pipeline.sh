@@ -19,27 +19,27 @@ if [[ -z "$1" ]]; then
 	exit
 fi
 #Generate qiime parameters file to include name in job
-(cat /share/apps/qiime/qiime_prefs.txt ; echo -e "parallel_pick_otus_trie:job_prefix\t"$1"_trie\nparallel_pick_otus_usearch61_ref:job_prefix\t"$1"_usearch61\nparallel_pick_otus_uclust_ref:job_prefix\t"$1"_uclust_ref\nparallel_assign_taxonomy_rdp:job_prefix\t"$1"_RDP\nparallel_align_seqs_pynast:job_prefix\t"$1"_PyNAST") > $HOME/$1/"$1"_qiime_params.txt
+(cat /share/apps/qiime/qiime_prefs.txt ; echo -e "parallel_pick_otus_trie:job_prefix\t3B_"$1"\nparallel_pick_otus_usearch61_ref:job_prefix\t3C"$1"\nparallel_pick_otus_uclust_ref:job_prefix\t3D_"$1"\nparallel_assign_taxonomy_rdp:job_prefix\t4_"$1"\nparallel_align_seqs_pynast:job_prefix\t5_"$1"") > $HOME/$1/"$1"_qiime_params.txt
 #
 #Convert the fastq file to fasta and qual
 #
-FIRST=$(qsub -N "$1"convert -v name=$1 convert_fastq.sh)
+FIRST=$(qsub -N "1_$1" -v name=$1 convert_fastq.sh)
 echo $FIRST
 #
 #Split the libraries according to the mapping file
 #
-SECOND=$(qsub -N "$1"spl_lib -v name=$1 -W depend=afterok:$FIRST split_lib.sh)
+SECOND=$(qsub -N "2_$1" -v name=$1 -W depend=afterok:$FIRST split_lib.sh)
 echo $SECOND
 #
 #Pick OTUs using open reference (first compare to Greengenes, then de novo),
 #align sequences, build tree, assign taxonomy
 #
-THIRD=$(qsub -N "$1"potu -v name=$1 -W depend=afterok:$SECOND pick_otus_open.sh)
+THIRD=$(qsub -N "3_$1" -v name=$1 -W depend=afterok:$SECOND pick_otus_open.sh)
 echo $THIRD
 #
 #remove chimeras
 #
-FOURTH=$(qsub -N "$1"chim -v name=$1 -W depend=afterok:$THIRD remove_chimeras.sh)
+FOURTH=$(qsub -N "7_$1" -v name=$1 -W depend=afterok:$THIRD remove_chimeras.sh)
 echo $FOURTH
 #
 #filter chimeras from alignment
