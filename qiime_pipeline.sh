@@ -18,8 +18,8 @@ if [[ -z "$1" ]]; then
 	echo -e "Error - you must enter a name for the analysis at the end of the command e.g.\"qiime_pipeline stream13\""
 	exit
 fi
-$LEN = ${#$1}
-if [ $LEN > 7 ]; then
+#
+if [ "${#1}" -ge "8" ]; then
 	echo -e "Error - analysis name must be no more than 7 characters\n"
 	exit
 fi
