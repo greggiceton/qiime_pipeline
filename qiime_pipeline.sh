@@ -15,7 +15,7 @@
 #
 #Check that $1 isn't empty
 if [[ -z "$1" ]]; then
-	echo -e "Error - you must enter a name for the analysis at the end of the command e.g.\"qiime_pipeline stream13\""
+	echo -e "Error - you must enter a name for the analysis at the end of the command e.g.\"qiime_pipeline gregg13\""
 	exit
 fi
 #
@@ -33,12 +33,13 @@ fi
 #
 #Convert the fastq file to fasta and qual
 #
-FIRST=$(qsub -N "1_$1" -v name=$1 convert_fastq.sh)
-echo $FIRST
+#The first step commented out as we have established the split_libraries_fastq script can handle PGM data
+#FIRST=$(qsub -N "1_$1" -v name=$1 convert_fastq.sh)
+#echo $FIRST
 #
 #Split the libraries according to the mapping file
 #
-SECOND=$(qsub -N "2_$1" -v name=$1 -W depend=afterok:$FIRST split_lib.sh)
+SECOND=$(qsub -N "2_$1" -v name=$1 split_lib.sh)
 echo $SECOND
 #
 #Pick OTUs using open reference (first compare to Greengenes, then de novo),
