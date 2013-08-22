@@ -33,13 +33,12 @@ fi
 #
 #Convert the fastq file to fasta and qual
 #
-#The first step commented out as we have established the split_libraries_fastq script can handle PGM data
-#FIRST=$(qsub -N "1_$1" -v name=$1 convert_fastq.sh)
-#echo $FIRST
+FIRST=$(qsub -N "1_$1" -v name=$1 convert_fastq.sh)
+echo $FIRST
 #
 #Split the libraries according to the mapping file
 #
-SECOND=$(qsub -N "2_$1" -v name=$1 split_lib.sh)
+SECOND=$(qsub -N "2_$1" -v name=$1 -W depend=afterok:$FIRST split_lib.sh)
 echo $SECOND
 #
 #Pick OTUs using open reference (first compare to Greengenes, then de novo),
