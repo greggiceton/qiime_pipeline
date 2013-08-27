@@ -33,36 +33,36 @@ fi
 #
 #Convert the fastq file to fasta and qual
 #
-FIRST=$(qsub -N "1_$1" -v name=$1 convert_fastq.sh)
+FIRST=$(qsub -N "1_$1" -v name=$1 /share/apps/qiime_pipeline/convert_fastq.sh)
 echo $FIRST
 #
 #Split the libraries according to the mapping file
 #
-SECOND=$(qsub -N "2_$1" -v name=$1 -W depend=afterok:$FIRST split_lib.sh)
+SECOND=$(qsub -N "2_$1" -v name=$1 -W depend=afterok:$FIRST /share/apps/qiime_pipeline/split_lib.sh)
 echo $SECOND
 #
 #Pick OTUs using open reference (first compare to Greengenes, then de novo),
 #align sequences, build tree, assign taxonomy
 #
-THIRD=$(qsub -N "3_$1" -v name=$1 -W depend=afterok:$SECOND pick_otus_open.sh)
+THIRD=$(qsub -N "3_$1" -v name=$1 -W depend=afterok:$SECOND /share/apps/qiime_pipeline/pick_otus_open.sh)
 echo $THIRD
 #
 #remove chimeras
 #
-FOURTH=$(qsub -N "7_$1" -v name=$1 -W depend=afterok:$THIRD remove_chimeras.sh)
+FOURTH=$(qsub -N "7_$1" -v name=$1 -W depend=afterok:$THIRD /share/apps/qiime_pipeline/remove_chimeras.sh)
 echo $FOURTH
 #
 #filter chimeras from alignment
 #
-#FIFTH=$(qsub -N "$1"chim -v name=$1 -W depend=afterok:$FOURTH filter_chimeras_alignment.sh)
+#FIFTH=$(qsub -N "$1"chim -v name=$1 -W depend=afterok:$FOURTH /share/apps/qiime_pipeline/filter_chimeras_alignment.sh)
 #echo $FIFTH
 #
 #filter chimeras from otu table
 #
-#SIXTH=$(qsub -N "$1"chim -v name=$1 -W depend=afterok:$FIFTH filter_chimeras_otu_table.sh)
+#SIXTH=$(qsub -N "$1"chim -v name=$1 -W depend=afterok:$FIFTH /share/apps/qiime_pipeline/filter_chimeras_otu_table.sh)
 #echo $SIXTH
 #
 #Summarize taxa and draw plots
 #
-#SEVENTH=$(qsub -N "$1"sum_tax -v name=$1 -W depend=afterok:$SIXTH sum_taxa_plots.sh)
+#SEVENTH=$(qsub -N "$1"sum_tax -v name=$1 -W depend=afterok:$SIXTH /share/apps/qiime_pipeline/sum_taxa_plots.sh)
 #echo $SEVENTH
