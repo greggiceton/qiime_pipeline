@@ -59,10 +59,10 @@ echo $FIFTH
 #
 #filter chimeras from otu table
 #
-#SIXTH=$(qsub -N "$1" -v name=$1 -W depend=afterok:$FIFTH /share/apps/qiime_pipeline/filter_chimeras_otu_table.sh)
-#echo $SIXTH
+SIXTH=$(qsub -N "9_$1" -v name=$1 -W depend=afterok:$FIFTH /share/apps/qiime_pipeline/filter_chimeras_otu_table.sh)
+echo $SIXTH
 #
 #Summarize taxa and draw plots
 #
-#SEVENTH=$(qsub -N "$1" -v name=$1 -W depend=afterok:$SIXTH /share/apps/qiime_pipeline/sum_taxa_plots.sh)
+#SEVENTH=$(qsub -N "10_$1" -v name=$1 -W depend=afterok:$SIXTH /share/apps/qiime_pipeline/sum_taxa_plots.sh)
 #echo $SEVENTH
