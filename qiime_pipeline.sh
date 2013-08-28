@@ -65,6 +65,6 @@ echo $SIXTH
 SEVENTH=$(qsub -N "10_$1" -v name=$1 -W depend=afterok:$SIXTH /share/apps/qiime_pipeline/rebuild_tree.sh)
 echo $SEVENTH
 #
-EIGHTH=$(qsub -N "11_$1" -v name=$1 -W depend=afterok:$SEVENTH /share/apps/qiime_pipeline/core_diversity.sh)
-echo $EIGHTH
+#EIGHTH=$(qsub -N "11_$1" -v name=$1 -W depend=afterok:$SEVENTH /share/apps/qiime_pipeline/core_diversity.sh)
+#echo $EIGHTH
 #
