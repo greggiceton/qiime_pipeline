@@ -54,8 +54,8 @@ echo $FOURTH
 #
 #filter chimeras from alignment
 #
-#FIFTH=$(qsub -N "$1"chim -v name=$1 -W depend=afterok:$FOURTH /share/apps/qiime_pipeline/filter_chimeras_alignment.sh)
-#echo $FIFTH
+FIFTH=$(qsub -N "8_$1"chim -v name=$1 -W depend=afterok:$FOURTH /share/apps/qiime_pipeline/filter_chimeras_alignment.sh)
+echo $FIFTH
 #
 #filter chimeras from otu table
 #
