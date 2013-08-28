@@ -49,7 +49,7 @@ echo $THIRD
 #
 #remove chimeras
 #
-FOURTH=$(qsub -N "7_$1" -v name=$1 -W depend=afterok:$THIRD /share/apps/qiime_pipeline/remove_chimeras.sh)
+FOURTH=$(qsub -N "7_$1" -v name=$1 -W depend=afterok:$THIRD /share/apps/qiime_pipeline/identify_chimeras.sh)
 echo $FOURTH
 #
 #filter chimeras from alignment
