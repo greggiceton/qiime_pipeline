@@ -1,6 +1,9 @@
 #!/bin/sh
 #Script to generically submit a task to the queue
 #
+error_path=$HOME/qsub_error_files
+output_path=$HOME/qsub_error_files
+
 echo -e "\nPlease enter a 10 character job name\n"
 read name
 if [ "${#name}" -ge "11" ]; then
@@ -16,5 +19,5 @@ if [ "$email_updates" = "Yes" ]; then
 fi
 echo -e "\nPlease enter your command\n"
 read cmd
-final=$(qsub -N $name $final_options $cmd)
+final=$(qsub -N $name -e $error_path -o $output_path $final_options $cmd)
 echo $final
