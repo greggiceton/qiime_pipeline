@@ -54,15 +54,15 @@ echo $FOURTH
 #
 #filter chimeras from alignment
 #
-FIFTH=$(qsub -N "8_$1"chim -v name=$1 -W depend=afterok:$FOURTH /share/apps/qiime_pipeline/filter_chimeras_alignment.sh)
+FIFTH=$(qsub -N "8_$1" -v name=$1 -W depend=afterok:$FOURTH /share/apps/qiime_pipeline/filter_chimeras_alignment.sh)
 echo $FIFTH
 #
 #filter chimeras from otu table
 #
-#SIXTH=$(qsub -N "$1"chim -v name=$1 -W depend=afterok:$FIFTH /share/apps/qiime_pipeline/filter_chimeras_otu_table.sh)
+#SIXTH=$(qsub -N "$1" -v name=$1 -W depend=afterok:$FIFTH /share/apps/qiime_pipeline/filter_chimeras_otu_table.sh)
 #echo $SIXTH
 #
 #Summarize taxa and draw plots
 #
-#SEVENTH=$(qsub -N "$1"sum_tax -v name=$1 -W depend=afterok:$SIXTH /share/apps/qiime_pipeline/sum_taxa_plots.sh)
+#SEVENTH=$(qsub -N "$1" -v name=$1 -W depend=afterok:$SIXTH /share/apps/qiime_pipeline/sum_taxa_plots.sh)
 #echo $SEVENTH
