@@ -19,5 +19,5 @@ if [ "$email_updates" = "Yes" ]; then
 fi
 echo -e "\nPlease enter your command\n"
 read cmd
-final=$(qsub -N $name -e $error_path -o $output_path $final_options $cmd)
+final=$(qsub -N "$name" -e "$error_path" -o "$output_path" "$final_options" "$cmd")
 echo $final
