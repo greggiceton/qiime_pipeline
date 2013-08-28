@@ -1,4 +1,4 @@
-#!/bash
+#!/bin/sh
 #Script to generically submit a task to the queue
 #
 echo -e "\nPlease enter a 10 character job name\n"
