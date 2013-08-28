@@ -9,4 +9,4 @@
 #PBS -e $HOME/qsub_error_files
 #
 #
-parallel_identify_chimeric_seqs.py -i $HOME/"$name"/otus/pynast_aligned_seqs/rep_set_aligned.fasta -a /share/apps/qiime/core_set_aligned.fasta.imputed -m ChimeraSlayer -O 8 -X "7_$name" -o $HOME/$name/otus/chimeras
+parallel_identify_chimeric_seqs.py -i $HOME/"$name"/otus/pynast_aligned_seqs/rep_set_aligned.fasta -a /share/apps/qiime/core_set_aligned.fasta.imputed -m ChimeraSlayer -O 16 -X "7_$name" -o $HOME/$name/otus/chimeras
