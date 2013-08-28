@@ -62,7 +62,9 @@ echo $FIFTH
 SIXTH=$(qsub -N "9_$1" -v name=$1 -W depend=afterok:$FIFTH /share/apps/qiime_pipeline/filter_chimeras_otu_table.sh)
 echo $SIXTH
 #
-#Summarize taxa and draw plots
+SEVENTH=$(qsub -N "10_$1" -v name=$1 -W depend=afterok:$SIXTH /share/apps/qiime_pipeline/rebuild_tree.sh)
+echo $SEVENTH
 #
-#SEVENTH=$(qsub -N "10_$1" -v name=$1 -W depend=afterok:$SIXTH /share/apps/qiime_pipeline/sum_taxa_plots.sh)
-#echo $SEVENTH
+EIGHTH=$(qsub -N "11_$1" -v name=$1 -W depend=afterok:$SEVENTH /share/apps/qiime_pipeline/core_diversity.sh)
+echo $EIGHTH
+#
