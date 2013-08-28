@@ -13,6 +13,9 @@
 #Designed to operate as a workflow on the NGS cluster
 #such that serial jobs are submitted to compute nodes
 #
+#Set paths for torque output files
+output_path=$HOME/qsub_error_files
+#
 #Check that $1 isn't empty
 if [[ -z "$1" ]]; then
 	echo -e "Error - you must enter a name for the analysis at the end of the command e.g.\"qiime_pipeline gregg13\""
@@ -33,38 +36,34 @@ fi
 #
 #Convert the fastq file to fasta and qual
 #
-FIRST=$(qsub -N "1_$1" -v name=$1 /share/apps/qiime_pipeline/convert_fastq.sh)
+FIRST=$(qsub -N "1_$1" -e $output_path -o $output_path -v name=$1 /share/apps/qiime_pipeline/convert_fastq.sh)
 echo $FIRST
 #
 #Split the libraries according to the mapping file
 #
-SECOND=$(qsub -N "2_$1" -v name=$1 -W depend=afterok:$FIRST /share/apps/qiime_pipeline/split_lib.sh)
+SECOND=$(qsub -N "2_$1" -e $output_path -o $output_path  -v name=$1 -W depend=afterok:$FIRST /share/apps/qiime_pipeline/split_lib.sh)
 echo $SECOND
 #
 #Pick OTUs using open reference (first compare to Greengenes, then de novo),
 #align sequences, build tree, assign taxonomy
 #
-THIRD=$(qsub -N "3_$1" -v name=$1 -W depend=afterok:$SECOND /share/apps/qiime_pipeline/pick_otus_open.sh)
+THIRD=$(qsub -N "3_$1"  -e $output_path -o $output_path -v name=$1 -W depend=afterok:$SECOND /share/apps/qiime_pipeline/pick_otus_open.sh)
 echo $THIRD
 #
 #remove chimeras
 #
-FOURTH=$(qsub -N "7_$1" -v name=$1 -W depend=afterok:$THIRD /share/apps/qiime_pipeline/identify_chimeras.sh)
+FOURTH=$(qsub -N "7_$1" -e $output_path -o $output_path  -v name=$1 -W depend=afterok:$THIRD /share/apps/qiime_pipeline/identify_chimeras.sh)
 echo $FOURTH
 #
 #filter chimeras from alignment
 #
-FIFTH=$(qsub -N "8_$1" -v name=$1 -W depend=afterok:$FOURTH /share/apps/qiime_pipeline/filter_chimeras_alignment.sh)
+FIFTH=$(qsub -N "8_$1" -e $output_path -o $output_path  -v name=$1 -W depend=afterok:$FOURTH /share/apps/qiime_pipeline/filter_chimeras_alignment.sh)
 echo $FIFTH
 #
 #filter chimeras from otu table
 #
-SIXTH=$(qsub -N "9_$1" -v name=$1 -W depend=afterok:$FIFTH /share/apps/qiime_pipeline/filter_chimeras_otu_table.sh)
+SIXTH=$(qsub -N "9_$1" -e $output_path -o $output_path  -v name=$1 -W depend=afterok:$FIFTH /share/apps/qiime_pipeline/filter_chimeras_otu_table.sh)
 echo $SIXTH
 #
-SEVENTH=$(qsub -N "10_$1" -v name=$1 -W depend=afterok:$SIXTH /share/apps/qiime_pipeline/rebuild_tree.sh)
+SEVENTH=$(qsub -N "10_$1" -e $output_path -o $output_path  -v name=$1 -W depend=afterok:$SIXTH /share/apps/qiime_pipeline/rebuild_tree.sh)
 echo $SEVENTH
-#
-#EIGHTH=$(qsub -N "11_$1" -v name=$1 -W depend=afterok:$SEVENTH /share/apps/qiime_pipeline/core_diversity.sh)
-#echo $EIGHTH
-#
