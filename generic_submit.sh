@@ -17,7 +17,7 @@ read email_updates
 if [ "$email_updates" = "Yes" ]; then
   echo -e "\nPlease enter your email address\n"
   read email_address
-  $email_address="$(echo ${$email_address} | tr -dc '[:print:]')"
+  email_address="$(echo ${$email_address} | tr -dc '[:print:]')"
   big_M="-M $email_address "
   little_m="-m abe "
 fi
