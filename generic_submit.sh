@@ -3,6 +3,8 @@
 #
 error_path=$HOME/qsub_error_files
 output_path=$HOME/qsub_error_files
+big_M=""
+little_m=""
 
 echo -e "\nPlease enter a 10 character job name\n"
 read name
@@ -23,5 +25,5 @@ read cmd
 temp_script=/tmp/$RANDOM.sh
 echo $cmd > $temp_script
 final=$(qsub -N "$name" -e "$error_path" -o "$output_path" "$big_M" "$little_m" "$temp_script")
-#echo qsub -N "$name" -e "$error_path" -o "$output_path" "$big_M" "$little_m" "$temp_script"
+echo qsub -N "$name" -e "$error_path" -o "$output_path" "$big_M" "$little_m" "$temp_script"
 echo $final
