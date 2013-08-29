@@ -24,7 +24,5 @@ echo -e "\nPlease enter your command\n"
 read cmd
 temp_script=/tmp/$RANDOM.sh
 echo $cmd > $temp_script
-echo "$temp_script\n"
 final=$(qsub -N $name -e $error_path -o $output_path $big_M $little_m $temp_script)
-#echo qsub -N "$name" -e "$error_path" -o "$output_path" "$big_M""$little_m""$temp_script"
 echo $final
