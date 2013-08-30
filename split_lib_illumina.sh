@@ -8,4 +8,4 @@
 #PBS -o $HOME/qsub_error_files
 #PBS -e $HOME/qsub_error_files
 #
-	split_libraries.py -m $HOME/$name/"$name"map.txt -f $HOME/$name/$name.fna -M 100 -b golay -o $HOME/$name/split_out
+	split_libraries.py -m $HOME/$name/"$name"map.txt -f $HOME/$name/$name.fasta -M 100 -b golay -o $HOME/$name/split_out
