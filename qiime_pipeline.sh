@@ -56,20 +56,22 @@ echo $FOURTH
 FIFTH=$(qsub -N "5_$1"  -e $output_path -o $output_path -v name=$1 -W depend=afterok:$FOURTH /share/apps/qiime_pipeline/filter_alignment.sh)
 echo $FIFTH
 #
+SIXTH=$(qsub -N "6_$1"  -e $output_path -o $output_path -v name=$1 -W depend=afterok:$FIFTH /share/apps/qiime_pipeline/filter_pynast_failures.sh)
+echo $SIXTH
 #remove chimeras
 #
-SIXTH=$(qsub -N "6_$1" -e $output_path -o $output_path  -v name=$1 -W depend=afterok:$FIFTH /share/apps/qiime_pipeline/identify_chimeras.sh)
-echo $SIXTH
+SEVENTH=$(qsub -N "7_$1" -e $output_path -o $output_path  -v name=$1 -W depend=afterok:$SIXTH /share/apps/qiime_pipeline/identify_chimeras.sh)
+echo $SEVENTH
 #
 #filter chimeras from alignment
 #
-SEVENTH=$(qsub -N "7_$1" -e $output_path -o $output_path  -v name=$1 -W depend=afterok:$SIXTH /share/apps/qiime_pipeline/filter_chimeras_alignment.sh)
-echo $SEVENTH
+EIGHTH=$(qsub -N "8_$1" -e $output_path -o $output_path  -v name=$1 -W depend=afterok:$SEVENTH /share/apps/qiime_pipeline/filter_chimeras_alignment.sh)
+echo $EIGHTH
 #
 #filter chimeras from otu table
 #
-EIGHTH=$(qsub -N "8_$1" -e $output_path -o $output_path  -v name=$1 -W depend=afterok:$SEVENTH /share/apps/qiime_pipeline/filter_chimeras_otu_table.sh)
+NINTH=$(qsub -N "9_$1" -e $output_path -o $output_path  -v name=$1 -W depend=afterok:$EIGHTH /share/apps/qiime_pipeline/filter_chimeras_otu_table.sh)
 echo $EIGHTH
 #
-NINTH=$(qsub -N "9_$1" -e $output_path -o $output_path  -v name=$1 -W depend=afterok:$EIGHTH /share/apps/qiime_pipeline/rebuild_tree.sh)
-echo $NINTH
+TENTH=$(qsub -N "10_$1" -e $output_path -o $output_path  -v name=$1 -W depend=afterok:$NINTH /share/apps/qiime_pipeline/rebuild_tree.sh)
+echo $TENTH
