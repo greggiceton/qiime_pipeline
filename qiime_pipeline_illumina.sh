@@ -41,13 +41,13 @@ fi
 #
 #Split the libraries according to the mapping file
 #
-SECOND=$(qsub -N "2_$1" -e $output_path -o $output_path  -v name=$1 /share/apps/qiime_pipeline/split_lib_illumina.sh)
-echo $SECOND
+#SECOND=$(qsub -N "2_$1" -e $output_path -o $output_path  -v name=$1 /share/apps/qiime_pipeline/split_lib_illumina.sh)
+#echo $SECOND
 #
 #Pick OTUs using open reference (first compare to Greengenes, then de novo),
 #align sequences, build tree, assign taxonomy
 #
-THIRD=$(qsub -N "3_$1"  -e $output_path -o $output_path -v name=$1 -W depend=afterok:$SECOND /share/apps/qiime_pipeline/pick_otus_open.sh)
+THIRD=$(qsub -N "3_$1"  -e $output_path -o $output_path -v name=$1 /share/apps/qiime_pipeline/pick_otus_open.sh)
 echo $THIRD
 #
 FOURTH=$(qsub -N "4_$1"  -e $output_path -o $output_path -v name=$1 -W depend=afterok:$THIRD /share/apps/qiime_pipeline/align.sh)
