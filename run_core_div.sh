@@ -12,7 +12,7 @@ read emailin
 if [[ -z "$emailin" ]]; then
 	emailopts=""
 	else
-	  emailopts="-m abe $emailin"
+	  emailopts="-m abe -M $emailin"
 fi
 RUN=$(name=$namein depth=$depthin cat=$catin qsub $emailopts -N "12_$namein" -v name,depth,cat /share/apps/qiime_pipeline/core_diversity.sh)
 echo $RUN
