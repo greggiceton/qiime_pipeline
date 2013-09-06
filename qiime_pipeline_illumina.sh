@@ -31,6 +31,13 @@ if [ ! -f $HOME/$1/"$1".fasta ]; then
 	echo -e "Fasta file not found in $HOME/$1\n"
 	exit
 fi
+echo -e "\nIf you wish to receive job progres updates via email enter your email address now, otherwise press enter\n"
+read emailin
+if [[ -z "$emailin" ]]; then
+	emailopts=""
+	else
+	  emailopts="-m abe -M $emailin"
+fi
 #Generate qiime parameters file to include name in job
 (cat /share/apps/qiime/qiime_prefs.txt ; echo -e "parallel_pick_otus_trie:job_prefix\t3B_"$1"\nparallel_pick_otus_usearch61_ref:job_prefix\t3C_"$1"\nparallel_pick_otus_uclust_ref:job_prefix\t3D_"$1"\nparallel_assign_taxonomy_rdp:job_prefix\t4_"$1"\nparallel_align_seqs_pynast:job_prefix\t5_"$1"") > $HOME/$1/"$1"_qiime_params.txt
 #
@@ -47,33 +54,33 @@ fi
 #Pick OTUs using open reference (first compare to Greengenes, then de novo),
 #align sequences, build tree, assign taxonomy
 #
-THIRD=$(qsub -N "3_$1"  -e $output_path -o $output_path -v name=$1 /share/apps/qiime_pipeline/pick_otus_open.sh)
+THIRD=$(qsub $emailopts -N "3_$1"  -e $output_path -o $output_path -v name=$1 /share/apps/qiime_pipeline/pick_otus_open.sh)
 echo $THIRD
 #
-FOURTH=$(qsub -N "4_$1"  -e $output_path -o $output_path -v name=$1 -W depend=afterok:$THIRD /share/apps/qiime_pipeline/align.sh)
+FOURTH=$(qsub $emailopts -N "4_$1"  -e $output_path -o $output_path -v name=$1 -W depend=afterok:$THIRD /share/apps/qiime_pipeline/align.sh)
 echo $FOURTH
 
-FIFTH=$(qsub -N "5_$1"  -e $output_path -o $output_path -v name=$1 -W depend=afterok:$FOURTH /share/apps/qiime_pipeline/filter_alignment.sh)
+FIFTH=$(qsub $emailopts -N "5_$1"  -e $output_path -o $output_path -v name=$1 -W depend=afterok:$FOURTH /share/apps/qiime_pipeline/filter_alignment.sh)
 echo $FIFTH
 #
 #remove chimeras
 #
-SIXTH=$(qsub -N "6_$1"  -e $output_path -o $output_path -v name=$1 -W depend=afterok:$FIFTH /share/apps/qiime_pipeline/filter_pynast_failures.sh)
+SIXTH=$(qsub $emailopts -N "6_$1"  -e $output_path -o $output_path -v name=$1 -W depend=afterok:$FIFTH /share/apps/qiime_pipeline/filter_pynast_failures.sh)
 echo $SIXTH
 #remove chimeras
 #
-SEVENTH=$(qsub -N "7_$1" -e $output_path -o $output_path  -v name=$1 -W depend=afterok:$SIXTH /share/apps/qiime_pipeline/identify_chimeras.sh)
+SEVENTH=$(qsub $emailopts -N "7_$1" -e $output_path -o $output_path  -v name=$1 -W depend=afterok:$SIXTH /share/apps/qiime_pipeline/identify_chimeras.sh)
 echo $SEVENTH
 #
 #filter chimeras from alignment
 #
-EIGHTH=$(qsub -N "8_$1" -e $output_path -o $output_path  -v name=$1 -W depend=afterok:$SEVENTH /share/apps/qiime_pipeline/filter_chimeras_alignment.sh)
+EIGHTH=$(qsub $emailopts -N "8_$1" -e $output_path -o $output_path  -v name=$1 -W depend=afterok:$SEVENTH /share/apps/qiime_pipeline/filter_chimeras_alignment.sh)
 echo $EIGHTH
 #
 #filter chimeras from otu table
 #
-NINTH=$(qsub -N "9_$1" -e $output_path -o $output_path  -v name=$1 -W depend=afterok:$EIGHTH /share/apps/qiime_pipeline/filter_chimeras_otu_table.sh)
+NINTH=$(qsub $emailopts -N "9_$1" -e $output_path -o $output_path  -v name=$1 -W depend=afterok:$EIGHTH /share/apps/qiime_pipeline/filter_chimeras_otu_table.sh)
 echo $EIGHTH
 #
-TENTH=$(qsub -N "10_$1" -e $output_path -o $output_path  -v name=$1 -W depend=afterok:$NINTH /share/apps/qiime_pipeline/rebuild_tree.sh)
+TENTH=$(qsub $emailopts -N "10_$1" -e $output_path -o $output_path  -v name=$1 -W depend=afterok:$NINTH /share/apps/qiime_pipeline/rebuild_tree.sh)
 echo $TENTH
