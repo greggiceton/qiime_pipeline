@@ -7,5 +7,5 @@ read depth
 head -n 1 $HOME/$name/"$name"map.txt
 echo -e "\nPlease review the above categories and enter a comma separated list of those which you wish to compare\n"
 read cat
-RUN=$("name=$name" "depth=$depth" "cat=$cat" qsub -N "12_$name" -v name,depth,cat /share/apps/qiime_pipeline/core_diversity.sh)
+RUN=$("name=$name depth=$depth cat=$cat" qsub -N "12_$name" -v name,depth,cat /share/apps/qiime_pipeline/core_diversity.sh)
 echo $RUN
