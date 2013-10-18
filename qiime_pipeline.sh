@@ -38,6 +38,13 @@ if [[ -z "$emailin" ]]; then
 	else
 	  emailopts="-m abe -M $emailin"
 fi
+
+echo -e "\nPlease enter the barcode type (golay_12 , hamming_8 or the number of bases per barcode)\n"
+read barcode_in
+
+echo -e "\nPlease enter the minimum average read quality you want\n"
+read qual_in
+
 #Generate qiime parameters file to include name in job
 (cat /share/apps/qiime/qiime_prefs.txt ; echo -e "parallel_pick_otus_trie:job_prefix\t3B_"$1"\nparallel_pick_otus_usearch61_ref:job_prefix\t3C_"$1"\nparallel_pick_otus_uclust_ref:job_prefix\t3D_"$1"\nparallel_assign_taxonomy_rdp:job_prefix\t4_"$1"\nparallel_align_seqs_pynast:job_prefix\t5_"$1"") > $HOME/$1/"$1"_qiime_params.txt
 #
@@ -48,7 +55,7 @@ echo $FIRST
 #
 #Split the libraries according to the mapping file
 #
-SECOND=$(qsub $emailopts -N "2_$1" -e $output_path -o $output_path  -v name=$1 -W depend=afterok:$FIRST /share/apps/qiime_pipeline/split_lib.sh)
+SECOND=$(barcode=$barcode_in name=$1 qual=qual_in qsub $emailopts -N "2_$1" -e $output_path -o $output_path  -v name,barcode,qual -W depend=afterok:$FIRST /share/apps/qiime_pipeline/split_lib.sh)
 echo $SECOND
 #
 #Pick OTUs using open reference (first compare to Greengenes, then de novo),
