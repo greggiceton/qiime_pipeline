@@ -27,7 +27,7 @@ read dn
 if [ "$dn" = "Yes" ]; then
                 temp_script=/tmp/$RANDOM.sh
                 echo $cmd > $temp_script
-                final=$(qsub -l walltime=168:00:00 -N $name -e $error_path -o $output_path $big_M $little_m $temp_script)
+                final=$(qsub -l walltime=368:00:00 -N $name -e $error_path -o $output_path $big_M $little_m $temp_script)
                 echo $final
         exit
 fi
