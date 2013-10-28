@@ -55,7 +55,7 @@ echo $FIRST
 #
 #Split the libraries according to the mapping file
 #
-SECOND=$(barcode=$barcode_in name=$1 qual=qual_in qsub $emailopts -N "2_$1" -e $output_path -o $output_path  -v name,barcode,qual -W depend=afterok:$FIRST /share/apps/qiime_pipeline/split_lib.sh)
+SECOND=$(barcode=$barcode_in name=$1 qual=$qual_in qsub $emailopts -N "2_$1" -e $output_path -o $output_path  -v name,barcode,qual -W depend=afterok:$FIRST /share/apps/qiime_pipeline/split_lib.sh)
 echo $SECOND
 #
 #Pick OTUs using open reference (first compare to Greengenes, then de novo),
