@@ -14,5 +14,12 @@ if [[ -z "$emailin" ]]; then
 	else
 	  emailopts="-m abe -M $emailin"
 fi
-RUN=$(name=$namein depth=$depthin cat=$catin qsub $emailopts -N "12_$namein" -v name,depth,cat /share/apps/qiime_pipeline/core_diversity.sh)
+echo -e "\nIf you wish to submit to the priority queue type Yes. This will only work for Gregg Iceton - it will appear to work but your job will not run.\n"
+read priorityin
+if [[ -z "$priorityin" ]]; then
+	priorityopts=""
+	else
+	  priorityopts="-q STREAM"
+fi
+RUN=$(name=$namein depth=$depthin cat=$catin qsub $priorityopts $emailopts -N "12_$namein" -v name,depth,cat /share/apps/qiime_pipeline/core_diversity.sh)
 echo $RUN
