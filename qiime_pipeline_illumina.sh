@@ -57,7 +57,7 @@ read otu_method_in
 #Pick OTUs using open reference (first compare to Greengenes, then de novo),
 #align sequences, build tree, assign taxonomy
 #
-THIRD=$(qsub $emailopts -N "3_$1"  -e $output_path -o $output_path -v name=$1 otu_method=$otu_method_in /share/apps/qiime_pipeline/pick_otus_open.sh)
+THIRD=$(qsub $emailopts -N "3_$1"  -e $output_path -o $output_path -v name=$1,otu_method=$otu_method_in /share/apps/qiime_pipeline/pick_otus_open.sh)
 echo $THIRD
 #
 FOURTH=$(qsub $emailopts -N "4_$1"  -e $output_path -o $output_path -v name=$1 -W depend=afterok:$THIRD /share/apps/qiime_pipeline/align.sh)
