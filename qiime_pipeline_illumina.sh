@@ -38,6 +38,9 @@ if [[ -z "$emailin" ]]; then
 	else
 	  emailopts="-m abe -M $emailin"
 fi
+echo -e "\nPlease enter your preferred OTU picking method (usearch61 or uclust)\n"
+read otu_method_in
+#
 #Generate qiime parameters file to include name in job
 (cat $HOME/qiime_prefs.txt ; echo -e "parallel_pick_otus_trie:job_prefix\t3B_"$1"\nparallel_pick_otus_usearch61_ref:job_prefix\t3C_"$1"\nparallel_pick_otus_uclust_ref:job_prefix\t3D_"$1"\nparallel_assign_taxonomy_rdp:job_prefix\t4_"$1"\nparallel_align_seqs_pynast:job_prefix\t5_"$1"") > $HOME/$1/"$1"_qiime_params.txt
 #
@@ -54,7 +57,7 @@ fi
 #Pick OTUs using open reference (first compare to Greengenes, then de novo),
 #align sequences, build tree, assign taxonomy
 #
-THIRD=$(qsub $emailopts -N "3_$1"  -e $output_path -o $output_path -v name=$1 /share/apps/qiime_pipeline/pick_otus_open.sh)
+THIRD=$(qsub $emailopts -N "3_$1"  -e $output_path -o $output_path -v name=$1 otu_method=$otu_method_in /share/apps/qiime_pipeline/pick_otus_open.sh)
 echo $THIRD
 #
 FOURTH=$(qsub $emailopts -N "4_$1"  -e $output_path -o $output_path -v name=$1 -W depend=afterok:$THIRD /share/apps/qiime_pipeline/align.sh)
